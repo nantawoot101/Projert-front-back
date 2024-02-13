@@ -26,6 +26,7 @@ export default function Header() {
         <Link to='/cart' className="btn bg-green-600 w-24 h-10 rounded-[10px] text-white">ตระกร้าสินค้า</Link>
         
         <img src="/src/img/icon/bell.png" alt="bell" className="w-[30px] h-[30px] ml-4 mr-5"/>
+        
     </div>
       
       

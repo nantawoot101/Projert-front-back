@@ -8,7 +8,6 @@ export default function UserHome(){
     <div>
       <Navmenu />
       <Promote />
-
     </div>
   )
 }

@@ -1,6 +1,11 @@
+import { Link } from "react-router-dom";
+
+
 export default function Navmenu(){
+
+
     return (
-      <div>
+      <div className="">
         <form>
           <label className="flex justify-center mt-10 ">
           <select className="w-full h-[70px] max-w-xs pl-2 text-[24px] text-center"name="Book">
@@ -11,7 +16,7 @@ export default function Navmenu(){
               </select>
           </label>
             <div className="text-center">
-              <a href="#" className="mr-10">หน้าแรก</a>
+              <Link to="/home" className="mr-10">หน้าแรก</Link>
               <a href="#" className="mr-10">ขายดี</a>
               <a href="#" className="mr-10">มาใหม่</a>
               <a href="#" className="mr-10">โปรโมชั่น</a>
