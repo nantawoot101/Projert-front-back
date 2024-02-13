@@ -60,4 +60,3 @@ exports.login = async (req, res, next) => {
 exports.getme = (req,res,next) => {
     res.json(req.user)
   }
-

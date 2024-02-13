@@ -82,7 +82,8 @@ model Book {
     author         String
     description    String       @db.VarChar(255)
     price          Int
-    stock_quantity Int          @default(0) 
+    stock_quantity Int          @default(0)
+    image          String       @db.VarChar(255)
     orderItems     OrderItems[]
     cart           Cart[]
     genres         Genres       @relation(fields: [genreId], references: [id])
