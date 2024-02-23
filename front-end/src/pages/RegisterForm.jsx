@@ -1,5 +1,7 @@
 import axios from 'axios'
 import {useState} from "react";
+import { Link } from 'react-router-dom';
+
 
 export default function RegisterForm() {
   const [input, setInput] = useState({
@@ -9,7 +11,8 @@ export default function RegisterForm() {
     password: '',
     phone: '',
     email: '',
-    address: ''
+    address: '',
+    gender: ''
   })
 
   const hdlChange = e => {
@@ -25,7 +28,7 @@ export default function RegisterForm() {
         alert('Register Successful')
       }
     }catch(err) {
-      console.log( err.message)
+      console.log('เกิดข้อผิดพลาดในการดึงข้อมูล:', err.message)
     }
 
   }
@@ -67,16 +70,16 @@ export default function RegisterForm() {
             <span className="label-text">เพศ</span>
           </div>
           <select
-            className="select select-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
-            name="gender"
-            value={input.gender}
-            onChange={ hdlChange }        
-            >
-            <option name="select_gender" value={input.gender}>เลือกเพศของคุณ</option>
-            <option name="man" value={input.gender}>ชาย</option>
-            <option name="female" value={input.gender}>หญิง</option>
-            <option name="other" value={input.gender}>อื่นๆ</option>
-            </select>
+  className="select select-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
+  name="gender"
+  value={input.gender}
+  onChange={hdlChange}        
+>
+  <option value="">เลือกเพศของคุณ</option>
+  <option value="male">ชาย</option>
+  <option value="female">หญิง</option>
+  <option value="other">อื่นๆ</option>
+</select>
             
           </label>
           
@@ -104,7 +107,7 @@ export default function RegisterForm() {
             type="password"
             className="input input-bordered border-2  rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="password"
-            placeholder="Psername"
+            placeholder="password"
             value={input.password}
             onChange={ hdlChange }
           />
@@ -160,6 +163,10 @@ export default function RegisterForm() {
           <button type="submit" className="btn bg-green-500 transition duration-300 hover:bg-green-600 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20 mr-2">สมัครสมาชิก</button>
           <button type="reset" className="btn bg-red-600 transition duration-300 hover:bg-red-500 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20">ยกเลิก</button>
         </div>
+        <div className="flex items-center justify-center mt-5">
+      <p >มีบัญชีแล้ว?</p>
+      <Link to='/login' className='bg-green-500 border-[2px] border-white rounded-[10px] w-[100px] h-[30px] text-center ml-3 text-white hover:bg-white hover:text-green-500 hover:border-green-500'>เข้าสู่ระบบ</Link>
+    </div>   
       </form>
     </div>
   );

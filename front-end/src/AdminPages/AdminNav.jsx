@@ -11,16 +11,18 @@ export default function AdminNav() {
     }
     
     return (
-      <nav className='sticky left-0 flex flex-col w-2/12 h-screen px-3 gap-y-5 bg-gray-100'>
+      <nav className='sticky left-0 flex flex-col  w-2/12 h-screen px-4 gap-y-6 bg-gray-100'>
        <div className="p-4">
-  <h2 className="text-lg font-semibold mb-4">เมนูจัดการ</h2>
-  <div className="mb-2">
-    <Link to="/home" className="">แดชบอร์ด</Link>
+  <h2 className="text-lg font-semibold">เมนูจัดการ</h2>
+  <div className="">
+  <Link to="/home" className=" py-2 rounded-md text-sm font-medium hover:bg-gray-200 hover:text-gray-900 focus:outline-none">
+      Dashboard
+  </Link>
   </div>
-  <div className="mb-2">
-    <button className="">สินค้า</button>
+  <div className="">
+    <Link to="/productfrom" className="">สินค้า</Link>
   </div>
-  <div className="mb-2">
+  <div className="">
     <button className="">คำสั่งซื้อ</button>
   </div>
   <div>
@@ -42,8 +44,9 @@ export default function AdminNav() {
 
         <div>
         <button>การตั้งค่า</button>
-        <Link to='#' onClick={hdlLogout} className='btn bg-white text-red-600 border-[2px] border-red-600 shadow-md hover:shadow-lg pl-2 ml-3 mt-2 w-56 h-10'>ออกจากระบบ</Link>
+        
         </div>
+        <Link to='#' onClick={hdlLogout} className='btn bg-white text-red-600 border-[2px] border-red-600 hover:bg-red-500 hover:text-white pl-2 mr-3 mt-2 w-56 h-10'>ออกจากระบบ</Link>
       </nav>
     )
 }

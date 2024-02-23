@@ -18,6 +18,7 @@ function AuthContextProvider(props) {
           headers : { Authorization : `Bearer ${token}` }
         })
         setUser(rs.data)
+        
       }catch(err) {
         console.log(err.message)
       }finally {
@@ -31,6 +32,7 @@ function AuthContextProvider(props) {
     setUser(null)
     localStorage.removeItem('token')
   }
+  
 
   return (
     <AuthContext.Provider value={ {user, setUser, loading, logout} }>

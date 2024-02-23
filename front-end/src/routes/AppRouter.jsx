@@ -9,6 +9,10 @@ import AdminHome from '../AdminPages/AdminHome'
 import AdminNav from '../AdminPages/AdminNav'
 import UserData from '../AdminPages/UserData'
 import AdminData from '../AdminPages/Admindata'
+import EditData from '../AdminPages/EditData'
+import AddProduct from '../AdminPages/AddProduct'
+import ProductFrom from '../AdminPages/ProductFrom'
+import AddGenre from '../AdminPages/AddGenre'
 
 
 
@@ -21,12 +25,11 @@ const guestRouter = createBrowserRouter([
     </>,
     children: [
       { index: true, element: <HomePage /> }, // ตั้งค่าให้ HomePage เป็นหน้าแรก
-      { path: '/home', element: <HomePage /> }, // คุณอาจจะไม่จำเป็นต้องมีเส้นทางนี้หาก HomePage เป็นหน้าแรกแล้ว
+      { path: '/home', element: <HomePage /> },
       { path: '/login', element: <LoginForm />},
       { path: '/register', element: <RegisterForm />},
       { path: '/cart', element: <Cart />},
-      { path: '/userdata', element: <UserData /> },
-      { path: '/admindata', element: <AdminData /> },
+
     ]
   }
 ])
@@ -40,7 +43,8 @@ const userRouter = createBrowserRouter([
     </>,
     children : [
       { index: true, element: <HomePage /> }, // ตั้งค่าให้ HomePage เป็นหน้าแรก
-      { path: '/login', element: <HomePage to='/' />}, // คุณอาจจะไม่จำเป็นต้องมีเส้นทางนี้หาก HomePage เป็นหน้าแรกแล้ว
+      { path: '/login', element: <HomePage to='/' />},
+      { path: '/login', element: <LoginForm />},
       { path: '/home', element: <HomePage /> },
       { path: '/cart', element: <Cart />},
     ]
@@ -61,6 +65,10 @@ const adminRouter = createBrowserRouter([
       { path: '/home', element: <AdminHome /> },
       { path: '/userdata', element: <UserData to='/'  /> },
       { path: '/admindata', element: <AdminData /> },
+      { path: '/editdata', element: <EditData  /> },
+      { path: '/productfrom', element: <ProductFrom  /> },
+      {path: '/addproduct', element: <AddProduct />},
+      {path: '/addgenre', element: <AddGenre />}
       
     ]
   }

@@ -28,7 +28,7 @@ export default function LoginForm() {
       setUser(rs1.data)
       
     }catch(err) {
-      console.log( err.message)
+      console.log('เกิดข้อผิดพลาดในการดึงข้อมูล:', err.message)
     }
   }
     return(
