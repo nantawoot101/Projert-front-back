@@ -14,19 +14,19 @@ enum Role {
 
 enum Gender {
     select_gender
-    man
+    male
     female
     other
 }
 
 model User {
-    id                  Int                   @id @default(autoincrement())
-    role                Role?                 @default(User)
+    id                  Int                   @id @default(autoincrement()) 
+    role Role                      @default (User)
     firstname          String                 @map("first_name")
     lastname           String                 @map("last_name")
     gender              Gender?               @default(other)
     email               String
-    phone               String
+    phone               String                @db.VarChar(10)
     address             String?               @db.VarChar(255)
     username            String                @db.VarChar(30) @unique
     password            String                 @db.VarChar(72)
@@ -66,24 +66,21 @@ model Cart {
     bookId       Int
 }
 
-enum Genre_Name {
-    Everycategory
-}
 
 model Genres {
     id         Int        @id @default(autoincrement())
-    genre_name Genre_Name @default(Everycategory)
+    genre_name String     
     book       Book[]
 }
 
 model Book {
     id             Int          @id @default(autoincrement())
-    bookname      String        @map("book_name")
+    title      String           @map("title")
     author         String
     description    String       @db.VarChar(255)
     price          Int
     stock_quantity Int          @default(0)
-    image          String       @db.VarChar(255)
+    bookimg String
     orderItems     OrderItems[]
     cart           Cart[]
     genres         Genres       @relation(fields: [genreId], references: [id])

@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 const db = require("../models/db");
 
 exports.register = async (req,res,next) => {
-    const {firstname,lastname,username,password,phone,email,address} = req.body;
+    const {firstname,lastname,username,password,phone,email,address,gender} = req.body;
     try{
-        if (!(firstname && lastname && username && password && phone && email && address )) {
-            return next(new Error("Fulfill all inputs"));
+        if (!(firstname && lastname && username && password && phone && email && address && gender )) {
+            return next(new Error("กรอกข้อมูลไม่ถูกต้อง"));
           }
         const hashedPassword = await bcrypt.hash(password, 8);
         console.log(hashedPassword);
@@ -17,14 +17,15 @@ exports.register = async (req,res,next) => {
             password: hashedPassword,
             phone,
             email,
-            address
+            address,
+            gender
             
         };
 
         const rs = await db.user.create({data})
         console.log(rs);
 
-        res.json({ msg: 'Register successful' })
+        res.json({ msg: 'ลงทะเบียนสำเร็จ' })
     }catch (err) {
         next(err);
     }

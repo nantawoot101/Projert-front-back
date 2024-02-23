@@ -5,7 +5,7 @@ const notFound = require('./middlewares/notFound')
 const errorMiddleware = require('./middlewares/error')
 const authRoute = require('./routes/auth-route')
 const userRoutes = require('./routes/user-route');
-
+const bookRoutes = require('./routes/book-route');
 
 const app = express()
 
@@ -15,6 +15,9 @@ app.use(express.json())
 // service
 app.use('/auth', authRoute)
 app.use('/users', userRoutes);
+app.use('/books', bookRoutes);
+
+
 
 
 // notFound
