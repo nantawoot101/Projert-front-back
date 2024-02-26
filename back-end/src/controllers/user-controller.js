@@ -12,18 +12,45 @@ exports.getUsers = async (req, res, next) => {
     }
 };
 
-exports.updateUser = async (req, res, next) => {
+exports.getUserById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // ตรวจสอบว่า id เป็น integer
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid ID" });
+    }
+
+    // ค้นหา user โดยใช้ id
+    const user = await db.user.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    // ตรวจสอบว่า user ไม่ null
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // ส่ง response user
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+exports.updateUser = (['admin'], async (req, res, next) => {
     const { id } = req.params;
     const data = req.body;
     try {
-        const rs = await db.user.update(data, {
-            where: { id: +id, userId: req.user.id }
-        });
-        res.json({ msg: 'Update ok', result: rs });
+      const rs = await db.user.update(data, {
+        where: { id: +id }
+      });
+      res.json({ msg: 'Update ok', result: rs });
     } catch (err) {
-        next(err);
+      next(err);
     }
-}
+  });
 
 // ลบข้อมูลผู้ใช้
 exports.deleteUser = async (req, res, next) => {
