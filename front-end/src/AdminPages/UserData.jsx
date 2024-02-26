@@ -3,35 +3,33 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 export default function UserData() {
-    const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null); // state ใหม่สำหรับเก็บข้อมูลผู้ใช้ที่เลือก
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:8888/users');
-                // กรองข้อมูลเฉพาะผู้ใช้ที่มีบทบาทเป็น User
-                const filteredUsers = response.data.filter(user => user.role === 'User');
-                setUsers(filteredUsers);
-            } catch (error) {
-                console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
-            }
-        };
-    
-        fetchData();
-    }, []);
-    
-
-
-    const handleDelete = async (userId) => {
-        try {
-            // ส่งคำขอลบข้อมูลผู้ใช้ไปยังเซิร์ฟเวอร์โดยระบุ userId ใน URL
-            const rs = await axios.delete(`http://localhost:8888/users/${userId}`);
-            // อัปเดตรายการผู้ใช้โดยลบผู้ใช้ที่ถูกลบออก
-            setUsers(users.filter(user => user.id !== userId));
-        } catch (error) {
-            console.error('เกิดข้อผิดพลาดในการลบข้อมูล:', error);
-        }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8888/users');
+        const filteredUsers = response.data.filter(user => user.role === 'User');
+        setUsers(filteredUsers);
+      } catch (error) {
+        console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
+      }
     };
+
+    fetchData();
+  }, []);
+
+  const handleEdit = async () => {
+    try {
+      const response = await axios.put('http://localhost:8888/users/edit/:id');
+      setSelectedUser(response.data); // เก็บข้อมูลผู้ใช้ที่เลือก
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้:', error);
+    }
+  }
+
+
     
     return (
         <div>
@@ -65,7 +63,7 @@ export default function UserData() {
                             <td className="border border-gray-400 px-4 py-2">{user.username}</td>
                             <td className="border border-gray-400 px-4 py-2">{user.password}</td>
                             <td className="border border-gray-400 px-4 py-2">
-                            <Link to={`/editdata/${user.id}`} className="text-blue-600 hover:underline">แก้ไข</Link>
+                            <Link to={'/editdata'} onClick={() => handleEdit(user.id)} className="text-blue-600 hover:underline">แก้ไข</Link>
                             </td>
                             <td className="border border-gray-400 px-4 py-2">
                                 <button onClick={() => handleDelete(user.id)} className="text-red-600 hover:underline">ลบ</button>

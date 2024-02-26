@@ -35,7 +35,6 @@ export default function AddProduct() {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-        
       });
 
     } catch (error) {

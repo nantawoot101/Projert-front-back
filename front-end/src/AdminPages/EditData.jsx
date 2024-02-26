@@ -1,10 +1,8 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
 
-export default function EditData({ userId }) {
-  const { token } = useAuth();
-  const [input, setInput] = useState({
+export default function EditData() {
+  const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
     username: '',
@@ -12,60 +10,56 @@ export default function EditData({ userId }) {
     phone: '',
     email: '',
     address: '',
-    gender: ''
+    gender: '',
   });
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8888/users/${userId}`);
-        setInput(response.data);
+        const response = await axios.get('http://localhost:8888/users/');
+        setFormData(response.data);
       } catch (error) {
-        console.error('เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้:', error);
+        console.error('Error fetching user:', error);
       }
-    };
-  
+    }
+
     fetchUser();
   }, [userId]);
 
-  const hdlChange = e => {
-    setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const hdlSubmit = async e => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      e.preventDefault();
-      const response = await axios.put(`http://localhost:8888/users/edituser/${userId}`, input, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log(response);
+      const response = await axios.put(
+        'http://localhost:8888/users/edit/:id',
+        formData
+      );
+
       if (response.status === 200) {
         alert('แก้ไขข้อมูลสำเร็จ');
+        // Redirect or do something else upon successful edit
+      } else {
+        console.error('เกิดข้อผิดพลาด:', response.data);
+        // Show appropriate error message
       }
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการแก้ไขข้อมูล:', error.message);
+      // Show appropriate error message
     }
-  };
-
-  const hdlReset = () => {
-    setInput({
-      firstname: '',
-      lastname: '',
-      username: '',
-      password: '',
-      phone: '',
-      email: '',
-      address: '',
-      gender: ''
-    });
   };
     
   return (
     <div className="p-5 border w-4/6 min-w-[1000px] mx-auto rounded mt-5">
       <div className="text-3xl mb-10 text-center">แก้ไขข้อมูลผู้ใช้</div>
-      <form className="flex flex-col gap-2" onSubmit={hdlSubmit}>
+      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
         <label className="form-control w-full max-w-xs mx-auto mb-5">
           <div className="label">
             <span className="label-text">ชื่อจริง</span>
@@ -74,8 +68,8 @@ export default function EditData({ userId }) {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="firstname"
-            value={input.firstname}
-            onChange={hdlChange}
+            value={formData.firstname}
+            onChange={handleChange}
           />
         </label>
 
@@ -87,8 +81,8 @@ export default function EditData({ userId }) {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="lastname"
-            value={input.lastname}
-            onChange={hdlChange}
+            value={formData.lastname}
+            onChange={handleChange}
           />
         </label>
 
@@ -99,8 +93,8 @@ export default function EditData({ userId }) {
           <select
             className="select select-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="gender"
-            value={input.gender}
-            onChange={hdlChange}
+            value={formData.gender}
+            onChange={handleChange}
           >
             <option value="">เลือกเพศของคุณ</option>
             <option value="male">ชาย</option>
@@ -117,8 +111,8 @@ export default function EditData({ userId }) {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="username"
-            value={input.username}
-            onChange={hdlChange}
+            value={formData.username}
+            onChange={handleChange}
           />
         </label>
 
@@ -130,8 +124,8 @@ export default function EditData({ userId }) {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="password"
-            value={input.password}
-            onChange={hdlChange}
+            value={formData.password}
+            onChange={handleChange}
           />
         </label>
 
@@ -143,8 +137,8 @@ export default function EditData({ userId }) {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="phone"
-            value={input.phone}
-            onChange={hdlChange}
+            value={formData.phone}
+            onChange={handleChange}
           />
         </label>
 
@@ -156,8 +150,8 @@ export default function EditData({ userId }) {
             type="email"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="email"
-            value={input.email}
-            onChange={hdlChange}
+            value={formData.email}
+            onChange={handleChange}
           />
         </label>
 
@@ -169,14 +163,14 @@ export default function EditData({ userId }) {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 pl-2"
             name="address"
-            value={input.address}
-            onChange={hdlChange}
+            value={formData.address}
+            onChange={handleChange}
           />
         </label>
 
         <div className="flex gap-5">
-          <button type="submit" className="btn bg-green-500 transition duration-300 hover:bg-green-600 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20 mr-2">แก้ไข</button>
-          <button type="button" onClick={hdlReset} className="btn bg-red-600 transition duration-300 hover:bg-red-500 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20">ยกเลิก</button>
+          <button type="submit" className="btn bg-green-500 transition duration-300 hover:bg-green-600 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20 mr-2">บันทึกข้อมูล</button>
+          <button type="button" className="btn bg-red-600 transition duration-300 hover:bg-red-500 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20">ยกเลิก</button>
         </div>
       </form>
     </div>
