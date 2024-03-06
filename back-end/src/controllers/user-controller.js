@@ -54,29 +54,31 @@ exports.updateUser = (['admin'], async (req, res, next) => {
 
 // ลบข้อมูลผู้ใช้
 exports.deleteUser = async (req, res, next) => {
-    const { id } = req.params; // รับค่า ID ผู้ใช้ที่ต้องการลบ
 
-    try {
-        // ตรวจสอบว่ามีผู้ใช้ด้วย ID ที่ระบุหรือไม่
-        const user = await db.user.findUnique({
-            where: {
-                id: parseInt(id),
-            },
-        });
+  try {
+    
+      const { id } = req.params; // รับค่า ID ผู้ใช้ที่ต้องการลบ
+      // ค้นหาผู้ใช้โดยใช้ ID
+      const user = await db.user.findUnique({
+          where: {
+              id: parseInt(id),
+          },
+      });
 
-        if (!user) {
-            return res.status(404).json({ message: "ไม่พบผู้ใช้" });
-        }
+      // ถ้าไม่มีผู้ใช้ที่ต้องการลบ
+      if (!user) {
+          return res.status(404).json({ message: "ไม่พบผู้ใช้" });
+      }
 
+      // ลบผู้ใช้
+      await db.user.delete({
+          where: {
+              id: parseInt(id),
+          },
+      });
 
-        await db.user.delete({
-            where: {
-                id: parseInt(id),
-            },
-        });
-
-        res.json({ message: "ลบผู้ใช้เรียบร้อยแล้ว" });
-    } catch (err) {
-        next(err);
-    }
+      res.json({ message: "ลบผู้ใช้เรียบร้อยแล้ว" });
+  } catch (err) {
+      next(err);
+  }
 };

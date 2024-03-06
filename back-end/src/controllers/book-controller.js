@@ -27,7 +27,7 @@ exports.getAllBooks = async (req, res, next) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'upload/')
+        cb(null, './upload')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname)
@@ -45,7 +45,7 @@ exports.createBook = async (req, res, next) => {
         }
 
         const { title, author, description, price, stock_quantity, genreId } = req.body;
-        const bookimg = req.file.path;
+        const bookimg = req.file.filename ;
         try {
             if (!(title && author && description && price && stock_quantity && bookimg && genreId)) {
                 return res.status(404).json({ error: 'Please provide all required book information' });
@@ -97,16 +97,22 @@ exports.updateBook = async (req, res, next) => {
 
   exports.deleteBook = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const book = await db.book.findByIdAndDelete(id);
-      if (!book) {
-        return res.status(404).json({ error: 'Book not found' });
-      }
-      res.json({ msg: 'ลบหนังสือสำเร็จ' });
+        const { id } = req.params;
+        const deletedBook = await db.book.delete({
+            where: {
+                id: parseInt(id)
+            }
+        });
+
+        if (!deletedBook) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+
+        return res.json({ msg: 'ลบหนังสือสำเร็จ' });
     } catch (err) {
-      next(err);
+        next(err);
     }
-  };
+};
 
   exports.getAllGenres = async (req, res, next) => {
     try {
@@ -168,3 +174,5 @@ exports.updateGenre = async (req, res, next) => {
         next(err);
     }
     };
+
+    

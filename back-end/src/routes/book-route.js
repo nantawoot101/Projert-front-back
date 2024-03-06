@@ -4,20 +4,21 @@ const bookController = require('../controllers/book-controller');
 
 
 
+
 router.post('/add', bookController.createBook);
 
 // หน้าแสดงรายการหนังสือทั้งหมด
 router.get('/', bookController.getAllBooks);
 
 // หน้าแสดงรายละเอียดหนังสือเฉพาะเล่ม
-router.get('/books/:id', bookController.getBookById);
+router.get('/:id', bookController.getBookById);
 
 
 // หน้าอัปเดตข้อมูลหนังสือ
-router.put('/books/:id', bookController.updateBook);
+router.put('/:id', bookController.updateBook);
 
 // หน้าลบหนังสือ
-router.delete('/books/:id', bookController.deleteBook);
+router.delete('/:id', bookController.deleteBook);
 
 // หน้าแสดงรายการหมวดหมู่หนังสือทั้งหมด
 router.get('/genres', bookController.getAllGenres);
@@ -30,6 +31,8 @@ router.post('/genres', bookController.genresBook);
 
 // หน้าอัปเดตข้อมูลหมวดหมู่หนังสือ
 router.put('/genres/:id', bookController.updateGenre);
+
+
 
 module.exports = router;
 
