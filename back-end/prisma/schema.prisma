@@ -144,3 +144,10 @@ model Review {
     book        Book     @relation(fields: [bookId], references: [id])
     bookId      Int      @map("book_id")
 }
+
+model Promote {
+ id Int @id @default(autoincrement())
+ promote_name String @map("promote_name")
+ promote_img String
+
+}

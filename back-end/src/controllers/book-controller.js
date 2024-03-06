@@ -27,7 +27,7 @@ exports.getAllBooks = async (req, res, next) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './upload')
+        cb(null, 'upload/product')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname)
