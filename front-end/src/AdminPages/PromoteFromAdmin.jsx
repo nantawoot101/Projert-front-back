@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
-export default function Promote() {
+export default function PromoteFromAdmin() {
     const [promotes, setPromotes] = useState([]);
 
     useEffect(() => {
@@ -18,16 +19,21 @@ export default function Promote() {
         fetchPromotes();
     }, []);
 
-    return(
+
+
+    return (
+        <div>
+            <Link to={'/addpromote'} className="btn w-64 rounded-full">เพิ่มการโปรโมท</Link>
+
+            <h2 className="text-xl font-bold mt-5">รายการสินค้า</h2>
             <div className="grid grid-cols-3 gap-4 mt-3">
                 {promotes.map((promote, index) => (
-                    <div key={index} className="">
-                        <img src={`http://localhost:8888/promote/${promote.promote_img}`} alt={promote.promote_name} className="mb-3 w-[600px] h-[300px] object-cover rounded-md" />
+                    <div key={index} className="border p-4 rounded-md">
+                        <img src={`http://localhost:8888/promote/${promote.promote_img}`} alt={promote.promote_name} className="mb-3 w-full h-40 object-cover rounded-md" />
                            
                         </div>
                 ))}
             </div>
- 
-    )
+        </div>
+    );
 }
-

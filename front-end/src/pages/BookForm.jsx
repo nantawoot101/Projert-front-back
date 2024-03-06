@@ -21,11 +21,11 @@ export default function ProductFrom() {
         fetchBooks();
       }, []);
 
-    const addToCart = async (id) => {
+      const addToCart = async (id) => {
         try {
             const response = await axios.post('http://localhost:8888/cart/add', {
                 bookId: id,
-                quantity: 1 ,
+                quantity: 1,
             });
             console.log(response.data);
         } catch (error) {
@@ -39,7 +39,7 @@ export default function ProductFrom() {
             <div className="grid grid-cols-3 gap-4 mt-3">
                 {books.map((book, index) => (
                     <div key={index} className="border p-4 rounded-md">
-                        <img src={`http://localhost:8888/${book.bookimg}`} alt={book.title} className="mb-3 w-[300px] h-[300px] object-cover rounded-md" />
+                        <img src={`http://localhost:8888/product/${book.bookimg}`} alt={book.title} className="mb-3 w-[300px] h-[300px] object-cover rounded-md" />
                         <h3 className="text-lg font-semibold"> ชื่อ: {book.title}</h3>
                         <p className="text-gray-500"> ชื่อผู้แต่ง: {book.author}</p>
                         <p className="text-gray-500"> คำอธิบาย: {book.description}</p>

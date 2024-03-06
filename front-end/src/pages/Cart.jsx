@@ -7,15 +7,16 @@ export default function Cart() {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const response = await axios.get('http://localhost:8888/cart'); // เรียกข้อมูลจาก endpoint API ที่สร้างขึ้น
-                setCartItems(response.data.cartItems); // อัปเดต state ของ cartItems ด้วยข้อมูลที่ได้รับจากเซิร์ฟเวอร์ API
+                const response = await axios.get('http://localhost:8888/cart');
+                console.log('Cart items:', response.data); // เพิ่ม console.log() เพื่อดูข้อมูลที่ได้รับ
+                setCartItems(response.data); // อัปเดต state ของ cartItems ด้วยข้อมูลที่ได้รับจากเซิร์ฟเวอร์ API
             } catch (error) {
-                console.error('เกิดข้อผิดพลาดในการดึงข้อมูลจากตาราง cart:', error);
+                console.error('Error fetching cart items:', error);
             }
         };
-
+    
         fetchCartItems();
-    }, []); // ให้ useEffect ทำงานเฉพาะครั้งแรกเมื่อโหลดหน้า
+    }, []);
 
     return (
         <div>

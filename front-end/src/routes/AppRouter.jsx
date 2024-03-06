@@ -15,6 +15,8 @@ import ProductFrom from '../AdminPages/ProductFrom'
 import AddGenre from '../AdminPages/AddGenre'
 import NewArrival from '../pages/NewArrival'
 import SellingWell from '../pages/SellingWell'
+import AddPromote from '../AdminPages/AddPromote'
+import PromoteFromAdmin from '../AdminPages/PromoteFromAdmin'
 
 
 
@@ -74,7 +76,11 @@ const adminRouter = createBrowserRouter([
       { path: '/editdata', element: <EditData  /> },
       { path: '/productfrom', element: <ProductFrom  /> },
       {path: '/addproduct', element: <AddProduct />},
-      {path: '/addgenre', element: <AddGenre />}
+      {path: '/addgenre', element: <AddGenre />},
+      {path: '/addpromote', element: <AddPromote />},
+      {path: '/promote-fromadmin', element: <PromoteFromAdmin />},
+       
+
       
     ]
   }

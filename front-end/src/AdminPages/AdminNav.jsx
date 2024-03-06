@@ -23,6 +23,9 @@ export default function AdminNav() {
     <Link to="/productfrom" className="">สินค้า</Link>
   </div>
   <div className="">
+    <Link to="/promote-fromadmin" className="">โปรโมท</Link>
+  </div>
+  <div className="">
     <button className="">คำสั่งซื้อ</button>
   </div>
   <div>
