@@ -2,8 +2,9 @@ import {Link, useNavigate} from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 
 export default function Header() {
-    const navigate = useNavigate()
+  const navigate = useNavigate()
   const {user, logout} = useAuth()
+
 
   const hdlLogout = () => {
     logout()

@@ -29,6 +29,18 @@ export default function UserData() {
     }
   }
 
+  const handleDelete = async (id) => {
+    try {
+        await axios.delete(`http://localhost:8888/users/${id}`);
+        // หลังจากลบข้อมูลสำเร็จ ให้ดึงข้อมูลสินค้าใหม่
+        const response = await axios.get('http://localhost:8888/user/');
+        setBooks(response.data);
+    } catch (error) {
+        console.error('เกิดข้อผิดพลาดในการลบข้อมูล:', error);
+    }
+};
+
+
 
     
     return (

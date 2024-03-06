@@ -13,6 +13,8 @@ import EditData from '../AdminPages/EditData'
 import AddProduct from '../AdminPages/AddProduct'
 import ProductFrom from '../AdminPages/ProductFrom'
 import AddGenre from '../AdminPages/AddGenre'
+import NewArrival from '../pages/NewArrival'
+import SellingWell from '../pages/SellingWell'
 
 
 
@@ -29,6 +31,8 @@ const guestRouter = createBrowserRouter([
       { path: '/login', element: <LoginForm />},
       { path: '/register', element: <RegisterForm />},
       { path: '/cart', element: <Cart />},
+      { path: '/new-areival', element: <NewArrival />},
+      { path: '/selling-well', element: <SellingWell />},
 
     ]
   }
@@ -47,6 +51,8 @@ const userRouter = createBrowserRouter([
       { path: '/login', element: <LoginForm />},
       { path: '/home', element: <HomePage /> },
       { path: '/cart', element: <Cart />},
+      { path: '/new-areival', element: <NewArrival />},
+      { path: '/selling-well', element: <SellingWell />},
     ]
   }
 ])

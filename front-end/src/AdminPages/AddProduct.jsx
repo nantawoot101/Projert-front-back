@@ -8,7 +8,7 @@ export default function AddProduct() {
     description: '',
     price: '',
     stock_quantity: '',
-    bookimg: '', // เพิ่ม property สำหรับเก็บข้อมูลภาพ
+    bookimg: null, // เพิ่ม property สำหรับเก็บข้อมูลภาพ
     genreId: ''
   });
 
@@ -23,20 +23,22 @@ export default function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-
-    const formDataToSend  = new FormData();
-    for (let key in formData) {
-      formDataToSend.append(key, formData[key]);
-    }
-
+  
+    const formDataToSend = new FormData();
+    formDataToSend.append('title', formData.title);
+    formDataToSend.append('author', formData.author);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('price', formData.price);
+    formDataToSend.append('stock_quantity', formData.stock_quantity);
+    formDataToSend.append('bookimg', formData.bookimg); // แนบรูปภาพเข้า FormData
+    formDataToSend.append('genreId', formData.genreId);
+  
     try {
-      await axios.post('http://localhost:8888/books/add', formDataToSend , {
+      await axios.post('http://localhost:8888/books/add', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-
     } catch (error) {
       console.error('Error creating product:', error);
     }
@@ -46,7 +48,7 @@ export default function AddProduct() {
   return (
     <div className="p-5 border w-4/6 min-w-[1000px] mx-auto rounded mt-5">
       <div className="text-3xl mb-10 text-center">เพิ่มสินค้าใหม่</div>
-      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-2" onSubmit={handleSubmit} >
         <label className="form-control w-full max-w-xs mx-auto mb-5">
           <div className="label">
             <span className="label-text">ชื่อหนังสือ</span>
