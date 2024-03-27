@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../models/db");
 
+
+//สมัครสมาชิก
 exports.register = async (req,res,next) => {
     const {firstname,lastname,username,password,phone,email,address,gender} = req.body;
     try{
@@ -31,7 +33,7 @@ exports.register = async (req,res,next) => {
     }
 }
 
-
+// api login
 exports.login = async (req, res, next) => {
     const{username, password} = req.body;
     try{
@@ -58,6 +60,7 @@ exports.login = async (req, res, next) => {
 
 };
 
+//api หน้าโปรไฟล์
 exports.getme = (req,res,next) => {
     res.json(req.user)
   }

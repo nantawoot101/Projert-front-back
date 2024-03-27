@@ -14,16 +14,30 @@ exports.getAllBooks = async (req, res, next) => {
   exports.getBookById = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const book = await db.book.findById(id);
-      if (!book) {
-        return res.status(404).json({ error: 'Book not found' });
-      }
-      res.json(book);
-    } catch (err) {
-      next(err);
-    }
-  };
 
+    // ตรวจสอบว่า id เป็น integer
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid ID" });
+    }
+
+    // ค้นหา user โดยใช้ id
+    const book = await db.book.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+
+    if (!book) {
+      return res.status(404).json({ error: "Book not found" });
+    }
+
+    // ส่ง response user
+    res.json(book);
+  } catch (err) {
+    next(err);
+  }
+};
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

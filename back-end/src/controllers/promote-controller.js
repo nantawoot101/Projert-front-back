@@ -11,6 +11,20 @@ exports.getAllpromote = async (req, res, next) => {
     }
   };
 
+  exports.getPromoteId = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const promote = await db.promote.findById(id);
+      if (!promote) {
+        return res.status(404).json({ error: 'promote not found' });
+      }
+      res.json(promote);
+    } catch (err) {
+      next(err);
+    }
+  };
+  
+
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'upload/promote');
@@ -19,6 +33,8 @@ exports.getAllpromote = async (req, res, next) => {
         cb(null, Date.now() + '-' + file.originalname);
     }
 });
+
+
 
 const upload = multer({ storage: storage }).single('promote_img');
 
@@ -34,18 +50,19 @@ exports.addpromote = async (req, res, next) => {
             return res.status(400).json({ error: 'No file uploaded' });
         }
 
-        const { promote_name } = req.body;
+        const { promote_name,bookId } = req.body;
         const promote_img = req.file.filename;
 
         try {
             // ตรวจสอบข้อมูลที่จำเป็น
-            if (!promote_name || !promote_img) {
+            if (!promote_name || !promote_img || !bookId) {
                 return res.status(400).json({ error: 'Please provide all required information' });
             }
 
             const data = {
                 promote_name,
-                promote_img
+                promote_img,
+                bookId: parseInt(bookId)
             };
 
             const rsb = await db.promote.create({data});
@@ -57,3 +74,23 @@ exports.addpromote = async (req, res, next) => {
         }
     });
 }
+
+
+exports.deletePromote = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const deletePromote = await db.promote.delete({
+            where: {
+                id: parseInt(id)
+            }
+        });
+
+        if (!deletePromote) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+
+        return res.json({ msg: 'ลบหนังสือสำเร็จ' });
+    } catch (err) {
+        next(err);
+    }
+};

@@ -1,5 +1,3 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const db = require("../models/db");
 
 
@@ -39,18 +37,31 @@ exports.getUserById = async (req, res, next) => {
     next(err);
   }
 };
-exports.updateUser = (['admin'], async (req, res, next) => {
-    const { id } = req.params;
-    const data = req.body;
-    try {
-      const rs = await db.user.update(data, {
-        where: { id: +id }
-      });
-      res.json({ msg: 'Update ok', result: rs });
-    } catch (err) {
-      next(err);
-    }
-  });
+
+//แก้ไขข้อมูลผู้ใช้
+exports.updateUser = async (req, res, next) => {
+  const { id } = req.params;
+  const data = req.body;
+  try {
+    const updatedUser = await db.user.update({
+      where: { id: parseInt(id) },
+      data: {
+        firstname: data.firstname,
+        lastname: data.lastname,
+        username: data.username,
+        password: data.password,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        gender: data.gender
+      }
+    });
+    res.status(200).json({ msg: 'อัปเดตข้อมูลสำเร็จ', user: updatedUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'มีข้อผิดพลาดในการอัปเดตข้อมูล' });
+  }
+};
 
 // ลบข้อมูลผู้ใช้
 exports.deleteUser = async (req, res, next) => {
