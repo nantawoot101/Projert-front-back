@@ -4,7 +4,8 @@ import axios from 'axios';
 export default function AddGenre() {
   const [promote, setPromote] = useState({
     promote_name: '' ,
-    promote_img: null
+    promote_img: null ,
+    bookId: ''
   });
 
   const handleChange = (e) => {
@@ -20,16 +21,15 @@ export default function AddGenre() {
     e.preventDefault();
     const promotes = new FormData();
     promotes.append('promote_name', promote.promote_name);
-    promotes.append('promote_img', promote.promote_img);
+    promotes.append('promote_img', promote.promote_img); // ใช้ชื่อ key ต่างกัน
+    promotes.append('bookId', promote.bookId); // เพิ่ม bookId ใน FormData
     try {
-        await axios.post('http://localhost:8888/promotes/add', promotes, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-
-       alert('เพิ่มการโปรโมทสำเร็จ')
-
+      await axios.post('http://localhost:8888/promotes/add', promotes, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      alert('เพิ่มการโปรโมทสำเร็จ')
     } catch (error) {
       console.error('Error creating promote:', error);
     }
@@ -63,6 +63,19 @@ export default function AddGenre() {
             onChange={handleFileChange}
           />
         </label>
+
+          <label className="form-control w-full max-w-xs mx-auto mb-5">
+            <div className="label">
+              <span className="label-text">รหัสหนังสือ</span>
+            </div>
+            <input
+                type="number"
+                className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
+                name="bookId"
+                value={promote.bookId} // เพิ่ม optional chaining ที่นี่
+                onChange={handleChange}
+              />
+          </label>
         <div className="flex gap-5">
           <button type="submit" className="btn bg-green-500 transition duration-300 hover:bg-green-600 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20 mr-2">เพิ่มการโปรโมท</button>
           <button type="reset" className="btn bg-red-600 transition duration-300 hover:bg-red-500 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20">ยกเลิก</button>

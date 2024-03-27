@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'; // Import useParams from react-router-dom
 
 export default function EditData() {
+  const { id } = useParams(); // Destructure id from useParams
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -12,20 +14,23 @@ export default function EditData() {
     address: '',
     gender: '',
   });
-
+  
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:8888/users/');
+        const response = await axios.get(`http://localhost:8888/users/${id}`);
         setFormData(response.data);
       } catch (error) {
         console.error('Error fetching user:', error);
       }
     }
-
-    fetchUser();
-  }, [userId]);
-
+    
+    if (id) {
+      fetchUser();
+    }
+  }, [id]); // Add id as a dependency of useEffect
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -36,13 +41,13 @@ export default function EditData() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.put(
-        'http://localhost:8888/users/edit/:id',
+        `http://localhost:8888/users/${id}`,
         formData
       );
-
+  
       if (response.status === 200) {
         alert('แก้ไขข้อมูลสำเร็จ');
         // Redirect or do something else upon successful edit
@@ -121,7 +126,7 @@ export default function EditData() {
             <span className="label-text">Password</span>
           </div>
           <input
-            type="text"
+            type="password"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="password"
             value={formData.password}

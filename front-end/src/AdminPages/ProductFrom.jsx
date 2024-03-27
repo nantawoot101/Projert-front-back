@@ -41,13 +41,16 @@ export default function ProductFrom() {
                     <div key={index} className="border p-4 rounded-md">
                         <img src={`http://localhost:8888/product/${book.bookimg}`} alt={book.title} className="mb-3 w-full h-40 object-cover rounded-md" />
                         <h3 className="text-lg font-semibold">ชื่อ: {book.title}</h3>
+                        <p className="text-gray-500"> รหัสID: {book.id}</p>
                         <p className="text-gray-500"> ชื่อผู้แต่ง: {book.author}</p>
                         <p className="text-gray-500"> คำอธิบาย: {book.description}</p>
-                        <p className="mt-2 text-gray-700">ราคา: {book.price} บาท</p>
-                        <p className="mt-2 text-gray-700">จำนวน: {book.stock_quantity}</p>
+                        <p className=" text-gray-700">ประเภทหนังสือ: {book.genreId}</p>
+                        <p className=" text-gray-700">ราคา: {book.price} บาท</p>
+                        <p className=" text-gray-700">จำนวน: {book.stock_quantity}</p>
+                        
                         {/* ปุ่มสำหรับการลบและแก้ไข */}
                         <div className="flex mt-4">
-                            <Link to={`/editbook/${book.id}`} className="btn mr-2">แก้ไข</Link>
+                            <Link to={`/edit-product/${book.id}`} className="btn mr-2">แก้ไข</Link>
                             <button onClick={() => deleteBook(book.id)} className="btn bg-red-500 text-white">ลบ</button>
                         </div>
                     </div>

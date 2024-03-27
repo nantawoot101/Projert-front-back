@@ -15,8 +15,12 @@ import ProductFrom from '../AdminPages/ProductFrom'
 import AddGenre from '../AdminPages/AddGenre'
 import NewArrival from '../pages/NewArrival'
 import SellingWell from '../pages/SellingWell'
+import BookDetails from '../pages/BookDetails'
 import AddPromote from '../AdminPages/AddPromote'
 import PromoteFromAdmin from '../AdminPages/PromoteFromAdmin'
+import EditProduct from '../AdminPages/EditProduct'
+import Payments from '../pages/Payments'
+import UserProfile from '../pages/UserProfile'
 
 
 
@@ -32,9 +36,10 @@ const guestRouter = createBrowserRouter([
       { path: '/home', element: <HomePage /> },
       { path: '/login', element: <LoginForm />},
       { path: '/register', element: <RegisterForm />},
-      { path: '/cart', element: <Cart />},
       { path: '/new-areival', element: <NewArrival />},
       { path: '/selling-well', element: <SellingWell />},
+      { path: '/book-details/:id', element: <BookDetails />},
+      {path: '/cart', element: <Cart/>},
 
     ]
   }
@@ -52,9 +57,12 @@ const userRouter = createBrowserRouter([
       { path: '/login', element: <HomePage to='/' />},
       { path: '/login', element: <LoginForm />},
       { path: '/home', element: <HomePage /> },
-      { path: '/cart', element: <Cart />},
+      { path: '/userprofile/:id', element: <UserProfile /> },
+      { path: '/cart', element: <Cart/>},
       { path: '/new-areival', element: <NewArrival />},
       { path: '/selling-well', element: <SellingWell />},
+      { path: '/payments', element: <Payments />},
+      { path: '/book-details/:id', element: <BookDetails />}
     ]
   }
 ])
@@ -73,12 +81,14 @@ const adminRouter = createBrowserRouter([
       { path: '/home', element: <AdminHome /> },
       { path: '/userdata', element: <UserData to='/'  /> },
       { path: '/admindata', element: <AdminData /> },
-      { path: '/editdata', element: <EditData  /> },
+      { path: '/editdata/:id', element: <EditData  /> },
       { path: '/productfrom', element: <ProductFrom  /> },
       {path: '/addproduct', element: <AddProduct />},
       {path: '/addgenre', element: <AddGenre />},
       {path: '/addpromote', element: <AddPromote />},
       {path: '/promote-fromadmin', element: <PromoteFromAdmin />},
+      {path: '/edit-product/:id', element: <EditProduct />},
+
        
 
       

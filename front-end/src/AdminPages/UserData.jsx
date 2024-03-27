@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export default function UserData() {
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null); // state ใหม่สำหรับเก็บข้อมูลผู้ใช้ที่เลือก
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,14 +21,6 @@ export default function UserData() {
     fetchData();
   }, []);
 
-  const handleEdit = async () => {
-    try {
-      const response = await axios.put('http://localhost:8888/users/edit/:id');
-      setSelectedUser(response.data); // เก็บข้อมูลผู้ใช้ที่เลือก
-    } catch (error) {
-      console.error('เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้:', error);
-    }
-  }
 
   const handleDelete = async (id) => {
     try {
@@ -75,7 +68,7 @@ export default function UserData() {
                             <td className="border border-gray-400 px-4 py-2">{user.username}</td>
                             <td className="border border-gray-400 px-4 py-2">{user.password}</td>
                             <td className="border border-gray-400 px-4 py-2">
-                            <Link to={'/editdata'} onClick={() => handleEdit(user.id)} className="text-blue-600 hover:underline">แก้ไข</Link>
+                            <Link to={`/editdata/${user.id}`} className="text-blue-600 hover:underline">แก้ไข</Link>
                             </td>
                             <td className="border border-gray-400 px-4 py-2">
                                 <button onClick={() => handleDelete(user.id)} className="text-red-600 hover:underline">ลบ</button>
