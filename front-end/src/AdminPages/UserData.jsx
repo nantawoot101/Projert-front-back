@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
 
 export default function UserData() {
   const [users, setUsers] = useState([]);
-  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,14 +22,15 @@ export default function UserData() {
 
   const handleDelete = async (id) => {
     try {
-        await axios.delete(`http://localhost:8888/users/${id}`);
-        // หลังจากลบข้อมูลสำเร็จ ให้ดึงข้อมูลสินค้าใหม่
-        const response = await axios.get('http://localhost:8888/user/');
-        setBooks(response.data);
+      await axios.delete(`http://localhost:8888/users/${id}`);
+      const response = await axios.get('http://localhost:8888/users/');
+      alert("ลบข้อมูลสำเร็จ")
+      setUsers(response.data);
     } catch (error) {
-        console.error('เกิดข้อผิดพลาดในการลบข้อมูล:', error);
+      console.error('เกิดข้อผิดพลาดในการลบข้อมูล:', error);
+      alert("เกิดข้อผิดพลาดในการลบข้อมูล");
     }
-};
+  };
 
 
 

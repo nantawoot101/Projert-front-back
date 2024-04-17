@@ -64,7 +64,7 @@ export default function BookDetails() {
   return (
     <div>
       <Navmenu />
-      <div className="flex mt-20 justify-center ">
+      <div className="flex mt-10 justify-center max-w-[80%]">
         <img
           src={`http://localhost:8888/product/${book.bookimg}`}
           alt={book.title}
@@ -75,6 +75,7 @@ export default function BookDetails() {
           <p className="text-gray-500 mt-5">ชื่อผู้แต่ง: {book.author}</p>
           <p className="text-gray-500 mt-5">คำอธิบาย: {book.description}</p>
           <p className="mt-5 text-gray-700 ">จำนวนสต๊อกสินค้า: {book.stock_quantity}</p>
+          <h3 className="mt-5 text-lg font-semibold ">ราคา: ฿{book.price}</h3>
           <div className="flex items-center border border-gray-300 rounded mt-5">
             <button onClick={decreaseQuantity} className="px-3 py-1 border-r border-gray-300 flex-grow">-</button>
             <input type="number" id="quantity" min="1" value={cart_quantity} readOnly className="w-8 h-8 text-center flex-grow" /> 
@@ -86,9 +87,9 @@ export default function BookDetails() {
           >
             เพิ่มสินค้าลงตระกร้า
           </button>
-          <Link to="/payments" className="btn bg-green-500 text-white px-4 py-2 rounded-md mt-2 w-[150px]">
-            ฿ {book.price}
-          </Link>
+          <button className="btn bg-green-500 text-white px-4 py-2 rounded-md mt-2 ml-3 w-[150px]">
+            ซื้อเลย
+          </button>
         </div>
       </div>
     </div>

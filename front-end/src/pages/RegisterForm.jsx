@@ -12,7 +12,7 @@ export default function RegisterForm() {
     phone: '',
     email: '',
     address: '',
-    gender: ''
+    gender: '',
   })
 
   const hdlChange = e => {
@@ -25,7 +25,7 @@ export default function RegisterForm() {
       const rs = await axios.post('http://localhost:8888/auth/register', input)
       console.log(rs)
       if(rs.status === 200) {
-        alert('Register Successful')
+        alert('สมัครสมาชิกสำเร็จ')
       }
     }catch(err) {
       console.log('เกิดข้อผิดพลาดในการดึงข้อมูล:', err.message)

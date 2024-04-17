@@ -8,9 +8,11 @@ export default function AddProduct() {
     description: '',
     price: '',
     stock_quantity: '',
-    bookimg: null, // เพิ่ม property สำหรับเก็บข้อมูลภาพ
+    bookimg: null,
     genreId: ''
   });
+
+  const [previewImg, setPreviewImg] = useState(null); // เพิ่ม state เพื่อเก็บ URL ของรูปภาพที่จะแสดง
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,21 +20,23 @@ export default function AddProduct() {
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, bookimg: e.target.files[0] });
+    const selectedImg = e.target.files[0];
+    setFormData({ ...formData, bookimg: selectedImg });
+    setPreviewImg(URL.createObjectURL(selectedImg)); // สร้าง Object URL และเก็บไว้ใน state สำหรับการแสดงรูปภาพ
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formDataToSend = new FormData();
     formDataToSend.append('title', formData.title);
     formDataToSend.append('author', formData.author);
     formDataToSend.append('description', formData.description);
     formDataToSend.append('price', formData.price);
     formDataToSend.append('stock_quantity', formData.stock_quantity);
-    formDataToSend.append('bookimg', formData.bookimg); // แนบรูปภาพเข้า FormData
+    formDataToSend.append('bookimg', formData.bookimg);
     formDataToSend.append('genreId', formData.genreId);
-  
+
     try {
       await axios.post('http://localhost:8888/books/add', formDataToSend, {
         headers: {
@@ -42,9 +46,9 @@ export default function AddProduct() {
       alert("เพิ่มหนังสือสำเร็จ")
     } catch (error) {
       console.error('Error creating product:', error);
+      alert("เกิดข้อผิดพลาดในการเพิ่มหนังสือ");
     }
   };
-
 
   return (
     <div className="p-5 border w-4/6 min-w-[1000px] mx-auto rounded mt-5">
@@ -125,21 +129,24 @@ export default function AddProduct() {
             name="bookimg"
             onChange={handleFileChange}
           />
+          {previewImg && (
+            <img src={previewImg} alt="Preview" className="mt-3 rounded w-[250px]" /> // แสดงรูปภาพตัวอย่างถ้ามีการเลือกรูป
+          )}
         </label>
-        <label className="form-control w-full max-w-xs mx-auto mb-5">
-  <div className="label">
-    <span className="label-text">รหัสหมวดหมู่หนังสือ</span>
-  </div>
-  <input
-    type="number"
-    className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
-    name="genreId"
-    value={formData.genreId}
-    onChange={handleChange}
-  />
-</label>
 
-       
+        <label className="form-control w-full max-w-xs mx-auto mb-5">
+          <div className="label">
+            <span className="label-text">รหัสหมวดหมู่หนังสือ</span>
+          </div>
+          <input
+            type="number"
+            className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
+            name="genreId"
+            value={formData.genreId}
+            onChange={handleChange}
+          />
+        </label>
+
         <div className="flex gap-5">
           <button type="submit" className="btn bg-green-500 transition duration-300 hover:bg-green-600 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20 mr-2">เพิ่มสินค้า</button>
           <button type="reset" className="btn bg-red-600 transition duration-300 hover:bg-red-500 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20">ยกเลิก</button>

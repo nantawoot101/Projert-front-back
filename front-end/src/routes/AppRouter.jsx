@@ -19,8 +19,12 @@ import BookDetails from '../pages/BookDetails'
 import AddPromote from '../AdminPages/AddPromote'
 import PromoteFromAdmin from '../AdminPages/PromoteFromAdmin'
 import EditProduct from '../AdminPages/EditProduct'
-import Payments from '../pages/Payments'
+import ShippingAddress from '../pages/ShippingAddress'
 import UserProfile from '../pages/UserProfile'
+import Recommend from '../pages/Recommend'
+import Contact from '../pages/Contact'
+import Payments from '../pages/Payments'
+
 
 
 
@@ -61,8 +65,14 @@ const userRouter = createBrowserRouter([
       { path: '/cart', element: <Cart/>},
       { path: '/new-areival', element: <NewArrival />},
       { path: '/selling-well', element: <SellingWell />},
-      { path: '/payments', element: <Payments />},
-      { path: '/book-details/:id', element: <BookDetails />}
+      { path: '/shipping-address', element: <ShippingAddress />},
+      { path: '/book-details/:id', element: <BookDetails />},
+      { path: '/editdata/:id', element: <EditData  /> },
+      { path: '/recommend', element: <Recommend  /> },
+      { path: '/contact' , element: <Contact />},
+      { path: '/payments' , element: <Payments />},
+
+
     ]
   }
 ])

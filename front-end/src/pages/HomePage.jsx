@@ -3,10 +3,9 @@ import Promote from "./Promote";
 import BookForm from "./BookForm";
 
 
-export default function ProductFrom() {
+export default function HomePage() {
     return (
         <div>
-    
             <Navmenu />
             <Promote />
             <BookForm /> 

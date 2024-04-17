@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // Import useParams from react-router-dom
+import { useParams } from 'react-router-dom';
 
 export default function EditData() {
-  const { id } = useParams(); // Destructure id from useParams
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -14,12 +14,20 @@ export default function EditData() {
     address: '',
     gender: '',
   });
-  
-  
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8888/users/${id}`);
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('ไม่พบ token ใน localStorage');
+          return;
+        }
+        const response = await axios.get(`http://localhost:8888/users/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         setFormData(response.data);
       } catch (error) {
         console.error('Error fetching user:', error);
@@ -29,7 +37,7 @@ export default function EditData() {
     if (id) {
       fetchUser();
     }
-  }, [id]); // Add id as a dependency of useEffect
+  }, [id]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,9 +51,20 @@ export default function EditData() {
     e.preventDefault();
   
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('ไม่พบ token ใน localStorage');
+        return;
+      }
+  
       const response = await axios.put(
         `http://localhost:8888/users/${id}`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
   
       if (response.status === 200) {

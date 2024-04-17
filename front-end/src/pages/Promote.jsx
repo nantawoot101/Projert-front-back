@@ -41,17 +41,17 @@ export default function Promote() {
                 <nav>
                     <ul className="pagination flex items-center space-x-4">
                         <li className="page-item">
-                            <button className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center" onClick={() => setCurrentPage(currentPage === 1 ? 1 : currentPage - 1)}>&#9664;</button>
+                            <button className="w-10 h-10 rounded-full border  border-green-500 text-green-500 flex items-center justify-center" onClick={() => setCurrentPage(currentPage === 1 ? 1 : currentPage - 1)}>&#9664;</button>
                         </li>
                         {Array.from({ length: Math.ceil(promotes.length / promotesPerPage) }).map((_, index) => (
                             <li key={index} className="page-item">
-                                <button onClick={() => paginate(index + 1)} className={`w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center ${currentPage === index + 1 ? 'bg-gray-400 text-white' : 'text-black'}`}>
+                                <button onClick={() => paginate(index + 1)} className={`w-10 h-10 rounded-full border border-green-500 text-green-500 flex items-center justify-center ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'text-black'}`}>
                                     {index + 1}
                                 </button>
                             </li>
                         ))}
                         <li className="page-item">
-                            <button className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center" onClick={() => setCurrentPage(currentPage === Math.ceil(promotes.length / promotesPerPage) ? currentPage : currentPage + 1)}>&#9654;</button>
+                            <button className="w-10 h-10 rounded-full border  border-green-500 text-green-500 flex items-center justify-center" onClick={() => setCurrentPage(currentPage === Math.ceil(promotes.length / promotesPerPage) ? currentPage : currentPage + 1)}>&#9654;</button>
                         </li>
                     </ul>
                 </nav>

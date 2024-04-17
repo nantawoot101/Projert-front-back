@@ -13,6 +13,7 @@ export default function ProductFrom() {
                 setBooks(response.data);
             } catch (error) {
                 console.error('เกิดข้อผิดพลาดในการดึงข้อมูลสินค้า:', error);
+                alert("เกิดข้อผิดพลาดในการแก้ไขข้อมูล");
             }
         };
 
@@ -25,8 +26,10 @@ export default function ProductFrom() {
             // หลังจากลบข้อมูลสำเร็จ ให้ดึงข้อมูลสินค้าใหม่
             const response = await axios.get('http://localhost:8888/books/');
             setBooks(response.data);
+            alert("ลบข้อมูลสำเร็จ");
         } catch (error) {
             console.error('เกิดข้อผิดพลาดในการลบข้อมูล:', error);
+            alert("เกิดข้อผิดพลาดในการลบข้อมูล");
         }
     };
 

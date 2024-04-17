@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 
 export default function AddProduct() {
   const { id } = useParams();
-  const [formData, setFormData] = useState({
+  const [previewImg, setPreviewImg] = useState(null); // เพิ่ม state เพื่อเก็บ URL ของรูปภาพที่จะแสดง
+  const [editProduct, setEditProduct] = useState({
     title: '',
     author: '',
     description: '',
@@ -22,8 +23,14 @@ export default function AddProduct() {
 
   const fetchBookData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8888/books/${id}`);
-      setFormData(response.data);
+      const response = await axios.get(`http://localhost:8888/books/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` // ใช้ localStorage ในการเข้าถึง token
+        }
+      }
+    );
+      setEditProduct(response.data);
     } catch (error) {
       console.error('Error fetching book data:', error);
     }
@@ -31,14 +38,16 @@ export default function AddProduct() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setEditProduct((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, bookimg: e.target.files[0] });
+    const selectedImg = e.target.files[0]; // เก็บรูปที่เลือกไว้ในตัวแปร selectedImg
+    setEditProduct({ ...editProduct, bookimg: selectedImg });
+    setPreviewImg(URL.createObjectURL(selectedImg)); // สร้าง Object URL และเก็บไว้ใน state สำหรับการแสดงรูปภาพ
   };
 
   const handleSubmit = async (e) => {
@@ -48,13 +57,23 @@ export default function AddProduct() {
       let response;
       if (id) {
         response = await axios.put(
-          `http://localhost:8888/books/${id}`,
-          formData
+          `http://localhost:8888/books/edit/${id}`,
+          editProduct,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}` // ใช้ localStorage ในการเข้าถึง token
+            }
+          }
         );
       } else {
         response = await axios.post(
           'http://localhost:8888/books',
-          formData
+          editProduct,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}` // ใช้ localStorage ในการเข้าถึง token
+            }
+          }
         );
       }
 
@@ -83,7 +102,7 @@ export default function AddProduct() {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="title"
-            value={formData.title}
+            value={editProduct.title}
             onChange={handleChange}
           />
         </label>
@@ -96,7 +115,7 @@ export default function AddProduct() {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="author"
-            value={formData.author}
+            value={editProduct.author}
             onChange={handleChange}
           />
         </label>
@@ -109,7 +128,7 @@ export default function AddProduct() {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="description"
-            value={formData.description}
+            value={editProduct.description}
             onChange={handleChange}
           />
         </label>
@@ -122,7 +141,7 @@ export default function AddProduct() {
             type="text"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="price"
-            value={formData.price}
+            value={editProduct.price}
             onChange={handleChange}
           />
         </label>
@@ -135,7 +154,7 @@ export default function AddProduct() {
             type="number"
             className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
             name="stock_quantity"
-            value={formData.stock_quantity}
+            value={editProduct.stock_quantity}
             onChange={handleChange}
           />
         </label>
@@ -150,21 +169,24 @@ export default function AddProduct() {
             name="bookimg"
             onChange={handleFileChange}
           />
+          {previewImg && (
+            <img src={previewImg} alt="Preview" className="mt-3 rounded w-[250px]" /> // แสดงรูปภาพตัวอย่างถ้ามีการเลือกรูป
+          )}
         </label>
-        <label className="form-control w-full max-w-xs mx-auto mb-5">
-  <div className="label">
-    <span className="label-text">รหัสหมวดหมู่หนังสือ</span>
-  </div>
-  <input
-    type="number"
-    className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
-    name="genreId"
-    value={formData.genreId}
-    onChange={handleChange}
-  />
-</label>
 
-       
+        <label className="form-control w-full max-w-xs mx-auto mb-5">
+          <div className="label">
+            <span className="label-text">รหัสหมวดหมู่หนังสือ</span>
+          </div>
+          <input
+            type="number"
+            className="input input-bordered border-2 rounded rounded-20 w-full h-10 max-w-xs pl-2"
+            name="genreId"
+            value={editProduct.genreId}
+            onChange={handleChange}
+          />
+        </label>
+
         <div className="flex gap-5">
           <button type="submit" className="btn bg-green-500 transition duration-300 hover:bg-green-600 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20 mr-2">บันทึกข้อมูล</button>
           <button type="reset" className="btn bg-red-600 transition duration-300 hover:bg-red-500 text-white max-w-xs mx-auto w-[200px] h-10 rounded rounded-20">ยกเลิก</button>

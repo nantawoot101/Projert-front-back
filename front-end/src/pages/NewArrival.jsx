@@ -14,11 +14,11 @@ export default function NewArrival() {
       try {
         const response = await axios.get('http://localhost:8888/books/', {
           params: {
-            _sort: 'date_created',
-            _order: 'desc'
+            _sort: 'date_created', // เรียงตามวันที่สร้าง
+            _order: 'desc' // โดยแบบจากมากไปน้อย (ใหม่ไปเก่า)
           }
         });
-        setBooks(response.data);
+        setBooks(response.data.reverse()); // กลับข้อมูลให้เรียงลำดับใหม่
       } catch (error) {
         console.error('Error fetching new arrivals:', error);
       }
@@ -26,26 +26,7 @@ export default function NewArrival() {
     fetchNewArrivals();
   }, []);
 
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error('Token not found');
-        }
-        const response = await axios.get('http://localhost:8888/auth/me', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUserId(response.data.id);
-      } catch (error) {
-        console.error('Error fetching user ID:', error);
-      }
-    };
 
-    fetchUserId();
-  }, []);
 
   const addToCart = async (id) => {
     try {
@@ -80,10 +61,10 @@ export default function NewArrival() {
             <Link to={`/book-details/${book.id}`}>
               <img src={`http://localhost:8888/product/${book.bookimg}`} alt={book.title} className="mb-3 w-[350px] h-[350px] object-cover rounded-md" />
             </Link>
-            <Link to={`/book-details/${book.id}`} className="text-lg font-semibold">ชื่อหนังสือ: {book.title}</Link>
+            <Link to={`/book-details/${book.id}`} className="text-lg font-semibold"> {book.title}</Link>
             <p className="text-gray-500">ผู้แต่ง: {book.author}</p>
             <button onClick={() => addToCart(book.id)} className="btn bg-white text-green-500 px-4 py-2 rounded-md mt-2 border-green-500">เพิ่มสินค้าลงตระกร้า</button>
-            <Link to={`/book-details/${book.id}`} className="btn bg-green-500 text-white px-4 py-2 rounded-md mt-2 w-[150px]">฿ {book.price}</Link>
+            <Link to={`/book-details/${book.id}`} className="btn bg-green-500 text-white px-4 py-2 rounded-md mt-2 ml-3">฿ {book.price}</Link>
           </div>
         ))}
       </div>
@@ -91,5 +72,3 @@ export default function NewArrival() {
     </div>
   );
 }
-
-

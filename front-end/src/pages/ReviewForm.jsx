@@ -8,10 +8,10 @@ export default function ReviewForm ( bookId ) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/reviews', {
+            await axios.post('http://localhost:8000/reviews', {
                 review_text: reviewText,
                 rating: rating,
-                user_id: 1, // รหัสผู้ใช้ (ให้แก้ไขตามระบบการเข้าสู่ระบบ)
+                user_id: user_id, // รหัสผู้ใช้ (ให้แก้ไขตามระบบการเข้าสู่ระบบ)
                 book_id: bookId
             });
             // หลังจากส่งรีวิวสำเร็จ สามารถทำอย่างอื่นต่อได้ เช่น รีเฟรชหน้าหรือแสดงข้อความว่าส่งรีวิวสำเร็จ

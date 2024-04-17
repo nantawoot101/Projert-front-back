@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -40,7 +40,14 @@ export default function UserProfile() {
   return (
     <div>
         <h1 className="text-center text-[36px] mt-10">จัดการข้อมูลผู้ใช้</h1>
-    <div className='border p-4 rounded-md bg-gray-100 max-w-md text-[24px] mx-auto mt-10'>
+        <div className="ml-10 mt-5 text-[36px] flex items-center">
+  <h1>{user.username}</h1>
+  <div className="ml-auto">
+    <Link to={`/editdata/${user.id}`} className="btn border border-green-500 p-4 rounded-10 bg-white mr-10">แก้ไขข้อมูลส่วนตัว</Link>
+    <Link to={`/shipping-address`} className="btn border border-green-500 p-4 rounded-10 bg-white mr-10">เพิ่มที่อยู่สำหรับจัดส่งสินค้า</Link>
+  </div>
+    </div>
+    <div className='border p-4 rounded-md bg-gray-100 w-[1300px] text-[24px] mt-10 mx-auto'>
       <p><span className="font-semibold">Username:</span> {user.username}</p>
       <p><span className="font-semibold">ชื่อจริง:</span> {user.firstname}</p>
       <p><span className="font-semibold">นามสกุล:</span> {user.lastname}</p>
