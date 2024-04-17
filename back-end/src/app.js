@@ -8,6 +8,7 @@ const userRoutes = require('./routes/user-route');
 const bookRoutes = require('./routes/book-route');
 const cartRoutes = require('./routes/cart-route');
 const promoteRoutes = require('./routes/promote-route');
+const ShippingRoutes = require('./routes/shippingaddress-route');
 
 const app = express()
 
@@ -23,6 +24,8 @@ app.use('/users', userRoutes);
 app.use('/books', bookRoutes);
 app.use('/cart', cartRoutes);
 app.use('/promotes', promoteRoutes);
+app.use('/shipping', ShippingRoutes);
+
 
 
 

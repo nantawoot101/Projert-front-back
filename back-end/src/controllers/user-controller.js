@@ -1,4 +1,5 @@
 const db = require("../models/db");
+const bcrypt = require("bcryptjs");
 
 
 exports.getUsers = async (req, res, next) => {
@@ -10,8 +11,10 @@ exports.getUsers = async (req, res, next) => {
     }
 };
 
+
 exports.getUserById = async (req, res, next) => {
   try {
+    
     const { id } = req.params;
 
     // ตรวจสอบว่า id เป็น integer
@@ -38,58 +41,87 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
-//แก้ไขข้อมูลผู้ใช้
+
+const SALT_ROUNDS = 10;
 exports.updateUser = async (req, res, next) => {
-  const { id } = req.params;
-  const data = req.body;
   try {
-    const updatedUser = await db.user.update({
+    const { id } = req.params;
+    // ตรวจสอบว่า id เป็น integer
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid ID" });
+    }
+
+    let updateData = {};
+
+    if (req.body.firstname) {
+      updateData.firstname = req.body.firstname;
+    }
+    if (req.body.lastname) {
+      updateData.lastname = req.body.lastname;
+    }
+    if (req.body.username) {
+      updateData.username = req.body.username;
+    }
+
+    // ตรวจสอบและแปลงรหัสผ่านก่อนการอัปเดต
+    if (req.body.password) {
+      // ทำการ hash รหัสผ่านใหม่
+      const hashedPassword = await bcrypt.hash(req.body.password, SALT_ROUNDS);
+      // กำหนดรหัสผ่านที่แปลงแล้วให้เป็นค่า updateData.password
+      updateData.password = hashedPassword;
+    }
+
+    if (req.body.phone) {
+      updateData.phone = req.body.phone;
+    }
+    if (req.body.email) {
+      updateData.email = req.body.email;
+    }
+    if (req.body.address) {
+      updateData.address = req.body.address;
+    }
+    if (req.body.gender) {
+      updateData.gender = req.body.gender;
+    }
+
+    // อัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
+    const user = await db.user.update({
       where: { id: parseInt(id) },
-      data: {
-        firstname: data.firstname,
-        lastname: data.lastname,
-        username: data.username,
-        password: data.password,
-        phone: data.phone,
-        email: data.email,
-        address: data.address,
-        gender: data.gender
-      }
+      data: updateData,
     });
-    res.status(200).json({ msg: 'อัปเดตข้อมูลสำเร็จ', user: updatedUser });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'มีข้อผิดพลาดในการอัปเดตข้อมูล' });
+
+    // ตรวจสอบว่าพบผู้ใช้หรือไม่
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // ส่งข้อมูลผู้ใช้ที่อัปเดตแล้วกลับไปยังผู้ใช้
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
   }
 };
 
+
 // ลบข้อมูลผู้ใช้
 exports.deleteUser = async (req, res, next) => {
-
   try {
-    
-      const { id } = req.params; // รับค่า ID ผู้ใช้ที่ต้องการลบ
-      // ค้นหาผู้ใช้โดยใช้ ID
-      const user = await db.user.findUnique({
-          where: {
-              id: parseInt(id),
-          },
-      });
+    const { id } = req.params; // รับค่า ID ผู้ใช้ที่ต้องการลบ
+    // ค้นหาผู้ใช้โดยใช้ ID
+    const deletedUser = await db.user.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
 
-      // ถ้าไม่มีผู้ใช้ที่ต้องการลบ
-      if (!user) {
-          return res.status(404).json({ message: "ไม่พบผู้ใช้" });
-      }
+    // ถ้าไม่มีผู้ใช้ที่ต้องการลบ
+    if (!deletedUser) {
+      return res.status(404).json({ message: "ไม่พบผู้ใช้" });
+    }
 
-      // ลบผู้ใช้
-      await db.user.delete({
-          where: {
-              id: parseInt(id),
-          },
-      });
-
-      res.json({ message: "ลบผู้ใช้เรียบร้อยแล้ว" });
+    res.json({ message: "ลบผู้ใช้เรียบร้อยแล้ว" });
   } catch (err) {
-      next(err);
+    console.error('เกิดข้อผิดพลาดในการลบข้อมูล:', err);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการลบข้อมูล" });
   }
 };

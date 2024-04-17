@@ -30,26 +30,28 @@ model User {
     address             String?               @db.VarChar(255)
     username            String                @unique @db.VarChar(30)
     password            String                @db.VarChar(72)
+    profile             String?
     orders              Order[]
-    shippingInformation ShippingInformation[]
-    cart                Cart?
+    shippingAddress ShippingAddress[]
+    cart                Cart[]
     Review              Review[]
 }
 
 model Order {
-    id                  Int                  @id @default(autoincrement())
-    order_date          DateTime             @default(now())
-    total_amount        Int                  @default(0)
-    user                User                 @relation(fields: [userId], references: [id])
-    userId              Int                  @map("user_id")
-    orderItems          OrderItems[]
-    shippingInformation ShippingInformation?
-    Payments            Payments?
+    id                    Int                  @id @default(autoincrement())
+    order_date            DateTime             @default(now())
+    total_amount          Int                  @default(0)
+    user                  User                 @relation(fields: [userId], references: [id])
+    userId                Int                  @map("user_id")
+    shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+    shippingAddressId Int
+    orderItems            OrderItems[]
+    Payments              Payments?
 }
 
 model OrderItems {
     id       Int   @id @default(autoincrement())
-    quantity Int   @default(0)
+    quantity Int?  @default(0)
     subtotal Int   @default(0)
     order    Order @relation(fields: [orderId], references: [id])
     orderId  Int
@@ -58,21 +60,12 @@ model OrderItems {
 }
 
 model Cart {
-    id       Int        @id @default(autoincrement())
-    user     User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    userId   Int        @unique
-    book     Book       @relation(fields: [bookId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    bookId   Int
-    CartItem CartItem[]
-}
-
-model CartItem {
-    id                Int                @id @default(autoincrement())
-    bookId   Int
-    quantity Int
-    cartId   Int
-    book     Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
-    cart     Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+    id            Int  @id @default(autoincrement())
+    cart_quantity Int?
+    user          User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    userId        Int  @map("user_id")
+    book          Book @relation(fields: [bookId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    bookId        Int  @map("book_id")
 }
 
 model Genres {
@@ -83,18 +76,19 @@ model Genres {
 
 model Book {
     id             Int          @id @default(autoincrement())
-    title          String       @map("title")
-    author         String
-    description    String       @db.VarChar(255)
-    price          Int
-    stock_quantity Int          @default(0)
-    bookimg        String
+    title          String?      @map("title")
+    author         String?
+    description    String?      @db.VarChar(255)
+    price          Int?
+    stock_quantity Int?         @default(0)
+    bookimg        String?
+    date_created   DateTime     @default(now())
     orderItems     OrderItems[]
     cart           Cart[]
-    genres         Genres       @relation(fields: [genreId], references: [id])
+    genres         Genres       @relation(fields: [genreId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     genreId        Int
     Review         Review[]
-    CartItem       CartItem[]
+    Promote        Promote[]
 }
 
 enum Payment_Method {
@@ -104,32 +98,28 @@ enum Payment_Method {
 }
 
 model Payments {
-    payments       Int            @id @default(autoincrement())
+    id             Int            @id @default(autoincrement())
     paymentdate    DateTime       @default(now()) @map("payment_date")
     payment_method Payment_Method @map("payment_method")
-    amount         Int
+    amount         Int?
+    payment_img    String?
     order          Order          @relation(fields: [orderId], references: [id])
     orderId        Int            @unique @map("order_id")
 }
 
-enum ShippingStatus {
-    Shipped
-    In_transit
-    Delivered
-}
-
-model ShippingInformation {
-    id               Int            @id @default(autoincrement())
-    recipient_name   String
-    shipping_address String         @db.VarChar(255)
-    phone            Int
-    shipping_date    DateTime       @default(now())
-    estimated_date   DateTime       @default(now())
-    shipping_status  ShippingStatus @default(Shipped)
-    user             User           @relation(fields: [userId], references: [id])
-    userId           Int            @map("user_id")
-    order            Order          @relation(fields: [orderId], references: [id])
-    orderId          Int            @unique
+model ShippingAddress {
+    id               Int             @id @default(autoincrement())
+    recipient_fname  String?
+    recipient_lname  String?
+    shipping_address String?         @db.VarChar(255)
+    district         String?
+    prefecture       String?
+    province         String?
+    zip_code         String?
+    phone            String?
+    user             User            @relation(fields: [userId], references: [id])
+    userId           Int             @map("user_id")
+    Order Order[]
 }
 
 model Review {
@@ -139,6 +129,7 @@ model Review {
     like        Int      @default(0)
     respond     String?  @db.VarChar(255)
     review_date DateTime @db.Date
+    img_url     String
     user        User     @relation(fields: [userId], references: [id])
     userId      Int      @map("user_id")
     book        Book     @relation(fields: [bookId], references: [id])
@@ -146,8 +137,9 @@ model Review {
 }
 
 model Promote {
- id Int @id @default(autoincrement())
- promote_name String @map("promote_name")
- promote_img String
-
+    id           Int    @id @default(autoincrement())
+    promote_name String @map("promote_name")
+    promote_img  String
+    bookId       Int    @map("book_id")
+    book         Book   @relation(fields: [bookId], references: [id])
 }

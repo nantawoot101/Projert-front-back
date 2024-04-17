@@ -15,7 +15,7 @@ router.get('/:id', bookController.getBookById);
 
 
 // หน้าอัปเดตข้อมูลหนังสือ
-router.put('/:id', bookController.updateBook);
+router.put('/edit/:id', bookController.updateBook);
 
 // หน้าลบหนังสือ
 router.delete('/:id', bookController.deleteBook);

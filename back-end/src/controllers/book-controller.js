@@ -87,27 +87,57 @@ exports.createBook = async (req, res, next) => {
 }
 
 exports.updateBook = async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const { title, author, description, price, stock_quantity, genreId } = req.body;
-  
-      const updateData = {};
-      if (title) updateData.title = title;
-      if (author) updateData.author = author;
-      if (description) updateData.description = description;
-      if (price) updateData.price = parseInt(price);
-      if (stock_quantity) updateData.stock_quantity = parseInt(stock_quantity);
-      if (genreId) updateData.genreId = parseInt(genreId);
-  
-      const updatedBook = await db.book.findByIdAndUpdate(id, updateData, { new: true });
-      if (!updatedBook) {
-        return res.status(404).json({ error: 'Book not found' });
-      }
-      res.json({ msg: 'อัปเดตข้อมูลหนังสือสำเร็จ' });
-    } catch (err) {
-      next(err);
+  try {
+    // Destructure data from req.body
+    const { title, author, description, price, stock_quantity, genreId } = req.body;
+    
+    // Create an empty object to store update data
+    let updateData = {};
+
+    // Assign values to updateData if they are provided
+    if (title) {
+      updateData.title = title;
     }
-  };
+    if (author) {
+      updateData.author = author;
+    }
+    if (description) {
+      updateData.description = description;
+    }
+    if (price) {
+      updateData.price = parseInt(price);
+    }
+    if (stock_quantity) {
+      updateData.stock_quantity = parseInt(stock_quantity);
+    }
+    if (genreId) {
+      updateData.genreId = parseInt(genreId);
+    }
+    if (req.file) {
+      updateData.bookimg = req.file.filename;
+    }
+
+    // Update the book using the provided data
+    const book = await db.book.update({
+      where: {
+        id: parseInt(req.params.id)
+      },
+      data: updateData
+    });
+
+    // Check if book was found and updated
+    if (!book) {
+      return res.status(404).json({ error: 'Product not found.' });
+    }
+
+    // Send the updated book in the response
+    res.status(200).json(book);
+  } catch (error) {
+    // Forward any errors to the error handling middleware
+    next(error);
+  }
+};
+
 
   exports.deleteBook = async (req, res, next) => {
     try {
